@@ -3,23 +3,10 @@ package com.example.lab_week_12.model
 import com.squareup.moshi.Json
 
 data class Movie(
-    val adult: Boolean = false,
-    val backdrop_path: String = "",
-    val id: Int = 0,
-    @field:Json(name = "original_language")
-    val originalLanguage: String = "",
-    @field:Json(name = "original_title")
-    val originalTitle: String = "",
-    val overview: String = "",
-    val popularity: Float = 0f,
-    @field:Json(name = "poster_path")
-    val posterPath: String = "",
-    @field:Json(name = "release_date")
-    val releaseDate: String = "",
-    val title: String = "",
-    val video: Boolean = false,
-    @field:Json(name = "vote_average")
-    val voteAverage: Float = 0f,
-    @field:Json(name = "vote_count")
-    val voteCount: Int = 0
+    val id: Int,
+    val title: String,
+    @Json(name = "release_date") val releaseDate: String?,
+    @Json(name = "poster_path") val posterPath: String?,
+    val overview: String,
+    val popularity: Double
 )

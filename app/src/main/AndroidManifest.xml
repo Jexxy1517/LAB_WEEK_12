@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.lab_week_12.DetailsActivity"
-            android:parentActivityName="com.example.lab_week_12.MainActivity" />
+        <activity
+            android:name=".model.DetailsActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name="com.example.lab_week_12.MainActivity"
             android:exported="true">
             <intent-filter>

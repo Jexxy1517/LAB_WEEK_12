@@ -1,10 +1,11 @@
-package com.example.lab_week_12
+package com.example.lab_week_12.model
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.lab_week_12.R
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -13,7 +14,6 @@ class DetailsActivity : AppCompatActivity() {
         const val EXTRA_RELEASE = "release"
         const val EXTRA_OVERVIEW = "overview"
         const val EXTRA_POSTER = "poster"
-        const val IMAGE_URL = "https://image.tmdb.org/t/p/w185/"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,18 +27,17 @@ class DetailsActivity : AppCompatActivity() {
 
         val extras = intent.extras
 
-        titleText.text = extras?.getString(EXTRA_TITLE).orEmpty()
-        releaseText.text = extras?.getString(EXTRA_RELEASE).orEmpty().take(4)
+        if (extras != null) {
+            titleText.text = extras.getString(EXTRA_TITLE, "")
+            releaseText.text = extras.getString(EXTRA_RELEASE, "")
+            overviewText.text = extras.getString(EXTRA_OVERVIEW, "")
 
-        overviewText.text =
-            getString(R.string.movie_overview, extras?.getString(EXTRA_OVERVIEW).orEmpty())
-
-        val posterPath = extras?.getString(EXTRA_POSTER).orEmpty()
-        Glide.with(this@DetailsActivity)
-            .load("$IMAGE_URL$posterPath")
-            .placeholder(R.mipmap.ic_launcher)
-            .fitCenter()
-            .into(poster)
-
+            val posterPath = extras.getString(EXTRA_POSTER)
+            if (posterPath != null) {
+                Glide.with(this)
+                    .load("https://image.tmdb.org/t/p/w500$posterPath")
+                    .into(poster)
+            }
+        }
     }
 }
