@@ -3,13 +3,17 @@ package com.example.lab_week_12
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab_week_12.model.DetailsActivity
 import com.example.lab_week_12.model.MovieViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,21 +42,28 @@ class MainActivity : AppCompatActivity() {
             }
         })[MovieViewModel::class.java]
 
-        movieViewModel.popularMovies.observe(this) { popularMovies ->
-            if (popularMovies != null) {
-                movieAdapter.addMovies(
-                    popularMovies.sortedByDescending { it.popularity }
-                )
-            }
-        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-        movieViewModel.error.observe(this) { error ->
-            if (error.isNotEmpty()) {
-                Snackbar.make(
-                    recyclerView,
-                    error,
-                    Snackbar.LENGTH_LONG
-                ).show()
+                launch {
+                    movieViewModel.popularMovies.collect { movies ->
+                        if (movies.isNotEmpty()) {
+                            movieAdapter.addMovies(movies)
+                        }
+                    }
+                }
+
+                launch {
+                    movieViewModel.error.collect { error ->
+                        if (error.isNotEmpty()) {
+                            Snackbar.make(
+                                recyclerView,
+                                error,
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
             }
         }
     }
